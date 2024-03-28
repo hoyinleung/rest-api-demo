@@ -38,8 +38,20 @@ async function createDocument(document) {
   return result;
 }
 
+// Update a document
+async function updateDocument(documentId, updatedFields) {
+  const { client, collection } = await connectToDatabase();
+  const result = await collection.updateOne(
+    { _id: new ObjectId(documentId) },
+    { $set: updatedFields }
+  );
+  client.close();
+  return result;
+}
+
 module.exports = {
     findManyDocuments,
     findOneDocument,
-    createDocument
+    createDocument,
+    updateDocument
 }

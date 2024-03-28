@@ -26,30 +26,43 @@ app.get('/posts/:id', async (req, res) => {
   try {
     const dbRes = await dbOp.findOneDocument(req.params.id);
     res.json(dbRes);
-} catch (error) {
+  } catch (error) {
     // Handle any errors that occur during the asynchronous operation
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
-}
+  }
 });
 
 //創建新資料 (寫入)
 app.post('/posts', async (req, res) => {
 
   const newPost = {
-      "title": req.body.title,
-      "views": req.body.views,
-      "content": req.body.content
+    "title": req.body.title,
+    "views": req.body.views,
+    "content": req.body.content
   }
 
   try {
-      const dbRes = await dbOp.createDocument(newPost);
-      res.status(201).json(dbRes);
+    const dbRes = await dbOp.createDocument(newPost);
+    res.status(201).json(dbRes);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 
+});
+
+// 對特定ID的document更新部份資料
+app.patch('/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const dbRes = await dbOp.updateDocument(id, req.body);
+    res.json(dbRes);
+  }
+  catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
 app.listen(3001, () => {
