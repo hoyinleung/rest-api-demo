@@ -37,6 +37,15 @@ async function createDocument(document) {
   client.close();
   return result;
 }
+
+// Find hot documents
+async function getHotPosts(viewCount) {
+  const { client, collection } = await connectToDatabase();
+  const documents = await collection.find({ views: { $gt: viewCount } }).toArray();
+  client.close();
+  return documents;
+}
+
 // 搜尋文章
 async function searchDocumentByKeyword(keyword) {
   const { client, collection } = await connectToDatabase();
@@ -60,9 +69,20 @@ async function updateDocument(documentId, updatedFields) {
   return result;
 }
 
+// Delete a document
+async function deleteDocument(documentId) {
+  const { client, collection } = await connectToDatabase();
+  const result = await collection.deleteOne({ _id: new ObjectId(documentId) });
+  client.close();
+  return result;
+}
+
 module.exports = {
     findManyDocuments,
     findOneDocument,
     createDocument,
-    updateDocument
+    updateDocument,
+    deleteDocument,
+    searchDocumentByKeyword,
+    getHotPosts
 }

@@ -1,10 +1,12 @@
 GET http://localhost:3001/posts
 
-###
-
+### 讀取特定ID的document
 GET http://localhost:3001/posts/65fb509461f1100d7b3e3c27
+
 ###  搜尋
 GET http://localhost:3001/search?keyword=abc
+###
+GET http://localhost:3001/posts/hot
 
 ###
 
@@ -36,3 +38,18 @@ Content-Type: application/json
 {
   "views": 400
 }
+
+###
+
+PUT http://localhost:3001/posts/6601b9c613f02345e5d8b7f0
+Content-Type: application/json
+
+{
+  "title": "新文章999 New Title",
+  "views": 999,
+  "content": "999 content"
+}
+
+###
+
+DELETE http://localhost:3001/posts/6601b9c613f02345e5d8b7f0

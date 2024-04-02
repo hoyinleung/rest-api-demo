@@ -33,6 +33,17 @@ app.get('/search', async (req, res) => {
   }
 });
 
+// Get all hot posts
+app.get('/posts/hot', async (req, res) => {
+  try {
+      const dbRes = await dbOp.getHotPosts(30000)
+      res.json(dbRes);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.get('/posts/:id', async (req, res) => {
   //回應特定#id X post給訪客
   try {
@@ -74,6 +85,42 @@ app.patch('/posts/:id', async (req, res) => {
   }
   catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+// 對特定ID的document進行全部資料更新
+app.put('/posts/:id', async (req, res) => {
+
+  //檢查遞交上來的欄位資料齊了沒
+  function hasAllRequiredFields(reqBody) {
+    const requiredFields = ['title', 'content', 'views'];
+    return requiredFields.every(field => reqBody.hasOwnProperty(field));
+  }
+
+  if (!hasAllRequiredFields(req.body)) {
+    return res.status(400).json({ message: '沒有提交必要欄位資料: title, content, or views' });
+  }
+
+  //齊了就讓它進行更新
+  try {
+    const { id } = req.params;
+
+    const dbRes = await dbOp.updateDocument(id, req.body);
+    res.json(dbRes);
+  }
+  catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete a post by ID
+app.delete('/posts/:id',async (req, res) => {
+  try {
+      const dbRes = await dbOp.deleteDocument(req.params.id)
+      res.json(dbRes);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
