@@ -21,6 +21,18 @@ app.get('/posts', async (req, res) => {
   }
 });
 
+// Get all posts - READ (R)
+app.get('/search', async (req, res) => {
+  //回應所有post給訪客
+  try {
+    const dbRes = await dbOp.searchDocumentByKeyword(req.query.keyword) //search?keyword=關鍵字
+    res.json(dbRes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.get('/posts/:id', async (req, res) => {
   //回應特定#id X post給訪客
   try {

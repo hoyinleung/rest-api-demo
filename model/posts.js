@@ -37,6 +37,17 @@ async function createDocument(document) {
   client.close();
   return result;
 }
+// 搜尋文章
+async function searchDocumentByKeyword(keyword) {
+  const { client, collection } = await connectToDatabase();
+  //const document = await collection.find({content: {$regex:keyword}}).toArray();
+  const document = await collection.find({$or: [
+    { title: { $regex: new RegExp(keyword, 'i') }},
+    { content: { $regex: new RegExp(keyword, 'i') }} //i : case-insensitive
+  ]}).toArray();
+  client.close();
+  return document;
+}
 
 // Update a document
 async function updateDocument(documentId, updatedFields) {
