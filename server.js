@@ -13,8 +13,17 @@ app.get('/', (req, res) => {
 app.get('/posts', async (req, res) => {
   //回應所有post給訪客
   try {
-    const dbRes = await dbOp.findManyDocuments({})
-    res.json(dbRes);
+    if (req.query.page) {
+      const dbRes = await dbOp.findManyDocumentsWithPagination({},
+        parseInt(req.query.page),
+        parseInt(req.query.limit)
+      )
+      res.json(dbRes);
+    }
+    else {
+      const dbRes = await dbOp.findManyDocuments({})
+      res.json(dbRes);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -36,11 +45,11 @@ app.get('/search', async (req, res) => {
 // Get all hot posts
 app.get('/posts/hot', async (req, res) => {
   try {
-      const dbRes = await dbOp.getHotPosts(30000)
-      res.json(dbRes);
+    const dbRes = await dbOp.getHotPosts(30000)
+    res.json(dbRes);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -114,13 +123,13 @@ app.put('/posts/:id', async (req, res) => {
 });
 
 // Delete a post by ID
-app.delete('/posts/:id',async (req, res) => {
+app.delete('/posts/:id', async (req, res) => {
   try {
-      const dbRes = await dbOp.deleteDocument(req.params.id)
-      res.json(dbRes);
+    const dbRes = await dbOp.deleteDocument(req.params.id)
+    res.json(dbRes);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
