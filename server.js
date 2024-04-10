@@ -2,8 +2,15 @@ const express = require('express');
 const dbOp = require('./model/posts')
 const app = express();
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 app.use(bodyParser.json())
+
+let corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions))
 
 app.get('/', (req, res) => {
   res.send('API Homepage');
