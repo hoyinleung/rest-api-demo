@@ -65,14 +65,23 @@ async function getHotPosts(viewCount) {
   return documents;
 }
 
+const sanitizeUserInput = (keyword) => keyword.replace(/[\\$<>{}.*!&|:+]/g, "")
+
 // 搜尋文章
 async function searchDocumentByKeyword(keyword) {
   const { client, collection } = await connectToDatabase();
-  //const document = await collection.find({content: {$regex:keyword}}).toArray();
-  const document = await collection.find({$or: [
+
+  const sanitizedKeyword = sanitizeUserInput(keyword)
+
+  //console.log(`用戶Keyword輸入 : ${keyword} `)
+  console.log('🙂 用戶輸入 : ',keyword,' 🙂✅ 過濾後 : ',sanitizedKeyword)
+  const document = await collection.find({content: {$regex:sanitizedKeyword}}).toArray();
+
+  /* const document = await collection.find({$or: [
     { title: { $regex: new RegExp(keyword, 'i') }},
     { content: { $regex: new RegExp(keyword, 'i') }} //i : case-insensitive
-  ]}).toArray();
+  ]}).toArray(); */
+
   client.close();
   return document;
 }
