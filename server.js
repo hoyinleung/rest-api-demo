@@ -141,5 +141,5 @@ app.delete('/posts/:id', async (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log('Server listening on port 3001!');
+  console.log('後端Rest API正在3001號port運行中...');
 });
