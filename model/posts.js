@@ -67,11 +67,12 @@ async function getHotPosts(viewCount) {
 
 const sanitizeUserInput = (keyword) => keyword.replace(/[\\$<>{}.*!&|:+]/g, "")
 
-// 搜尋文章
+// 搜尋文章 
 async function searchDocumentByKeyword(keyword) {
   const { client, collection } = await connectToDatabase();
 
   const sanitizedKeyword = sanitizeUserInput(keyword)
+  //const sanitizedKeyword = keyword
 
   //console.log(`用戶Keyword輸入 : ${keyword} `)
   console.log('🙂 用戶輸入 : ',keyword,' 🙂✅ 過濾後 : ',sanitizedKeyword)
