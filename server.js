@@ -1,7 +1,9 @@
 const express = require('express');
 const dbOp = require('./model/posts')
+const userOp = require('./model/user')
 const app = express();
 const bodyParser = require('body-parser')
+const genHashPassword = require('./helpers/genHashPassword')
 const cors = require('cors')
 
 app.use(bodyParser.json())
@@ -138,6 +140,24 @@ app.delete('/posts/:id', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+//登記用戶
+app.post('/register', async (req, res) => {
+
+  const newUser = {
+    "username": req.body.username,
+    "password": await genHashPassword(req.body.password)
+  }
+
+  try {
+    const dbRes = await userOp.createDocument(newUser);
+    res.status(201).json(dbRes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
 });
 
 app.listen(3001, () => {

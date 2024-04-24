@@ -55,3 +55,12 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3001/posts/6601b9c613f02345e5d8b7f0
+
+###
+POST http://localhost:3001/register
+Content-Type: application/json
+
+{
+  "username": "user3",
+  "password": "password2222"
+}
