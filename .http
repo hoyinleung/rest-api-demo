@@ -61,6 +61,15 @@ POST http://localhost:3001/register
 Content-Type: application/json
 
 {
-  "username": "user3",
+  "username": "newUser",
+  "password": "password2222"
+}
+
+###
+POST http://localhost:3001/authenticate
+Content-Type: application/json
+
+{
+  "username": "newUser",
   "password": "password2222"
 }

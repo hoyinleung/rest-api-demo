@@ -16,14 +16,14 @@ async function connectToDatabase() {
 
 // Find multiple documents
 async function findManyDocuments(query) {
-    const { client, collection } = await connectToDatabase();
-    const documents = await collection.find(query).toArray();
-    client.close();
-    return documents;
+  const { client, collection } = await connectToDatabase();
+  const documents = await collection.find(query).toArray();
+  client.close();
+  return documents;
 }
 
 // Find multiple documents with Pagination
-async function findManyDocumentsWithPagination(query,page,limit) {
+async function findManyDocumentsWithPagination(query, page, limit) {
   const { client, collection } = await connectToDatabase();
 
   // Calculate skip based on page and limit
@@ -34,19 +34,26 @@ async function findManyDocumentsWithPagination(query,page,limit) {
 
   // Get total document count (optional)
   const totalResult = await collection.countDocuments(query);
-  
+
   client.close();
 
   // Return paginated data and total count (optional)
-  return {data,page,totalResult};
+  return { data, page, totalResult };
+}
+
+async function findUserByUsername(username) {
+  const { client, collection } = await connectToDatabase();
+  const document = await collection.findOne({ username: username });
+  client.close();
+  return document;
 }
 
 // Find a single document by ID
 async function findOneDocument(documentId) {
-    const { client, collection } = await connectToDatabase();
-    const document = await collection.findOne({ _id: new ObjectId(documentId) });
-    client.close();
-    return document;
+  const { client, collection } = await connectToDatabase();
+  const document = await collection.findOne({ _id: new ObjectId(documentId) });
+  client.close();
+  return document;
 }
 
 // Create a document
@@ -67,8 +74,8 @@ async function searchDocumentByKeyword(keyword) {
   //const sanitizedKeyword = keyword
 
   //console.log(`用戶Keyword輸入 : ${keyword} `)
-  console.log('🙂 用戶輸入 : ',keyword,' 🙂✅ 過濾後 : ',sanitizedKeyword)
-  const document = await collection.find({content: {$regex:sanitizedKeyword}}).toArray();
+  console.log('🙂 用戶輸入 : ', keyword, ' 🙂✅ 過濾後 : ', sanitizedKeyword)
+  const document = await collection.find({ content: { $regex: sanitizedKeyword } }).toArray();
 
   /* const document = await collection.find({$or: [
     { title: { $regex: new RegExp(keyword, 'i') }},
@@ -99,11 +106,12 @@ async function deleteDocument(documentId) {
 }
 
 module.exports = {
-    findManyDocuments,
-    findOneDocument,
-    createDocument,
-    updateDocument,
-    deleteDocument,
-    searchDocumentByKeyword,
-    findManyDocumentsWithPagination
+  findManyDocuments,
+  findOneDocument,
+  createDocument,
+  updateDocument,
+  deleteDocument,
+  findUserByUsername,
+  searchDocumentByKeyword,
+  findManyDocumentsWithPagination
 }

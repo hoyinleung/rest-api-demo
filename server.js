@@ -3,7 +3,7 @@ const dbOp = require('./model/posts')
 const userOp = require('./model/user')
 const app = express();
 const bodyParser = require('body-parser')
-const genHashPassword = require('./helpers/genHashPassword')
+const {genHashPassword,comparePassword} = require('./helpers/password')
 const cors = require('cors')
 
 app.use(bodyParser.json())
@@ -158,6 +158,37 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 
+});
+
+//Check user name and password is correct
+app.post('/authenticate', async (req, res) => {
+
+  try {
+    //1. 讀取用戶輸入的資料
+    const { username, password } = req.body;
+    
+    //2. 去資料庫讀取該用戶的username的那個document
+    const user = await userOp.findUserByUsername(username);
+
+    // 如讓username根本不存在的 => 否決
+    if(!user) {
+      return res.status(401).json( { message: 'Invalid credentials' } );
+    }
+
+    //3. 有該username存在的話，對比password與DB中的password
+    const isPasswordValid = await comparePassword(password, user.password);
+
+    // 如讓password對不上的 => 否決
+    if(!isPasswordValid) {
+      return res.status(401).json( { message: 'Invalid credentials' } );
+    }
+
+    //4 告訴用戶，此為一個合法用戶
+    res.json({ isValidUser: true });
+
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(3001, () => {
