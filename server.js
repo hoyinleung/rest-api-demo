@@ -14,10 +14,6 @@ let corsOptions = {
 }
 app.use(cors(corsOptions))
 
-app.get('/', (req, res) => {
-  res.send('API Homepage');
-});
-
 // Get all posts - READ (R)
 app.get('/posts', async (req, res) => {
   //回應所有post給訪客
@@ -189,6 +185,10 @@ app.post('/authenticate', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+app.get('/', (req, res) => {
+  res.send('API Homepage');
 });
 
 app.listen(3001, () => {
