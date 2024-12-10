@@ -188,6 +188,18 @@ app.post('/authenticate', async (req, res) => {
   }
 });
 
+// Webhook示範
+app.post('/webhook/example', async (req, res) => {
+
+  console.log(req.body);
+
+  /* const newUser = {
+    "username": req.body.username,
+    "password": await genHashPassword(req.body.password)
+  } */
+
+});
+
 app.get('/', (req, res) => {
   res.send('API Homepage');
 });
