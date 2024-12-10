@@ -193,12 +193,8 @@ app.post('/webhook/example', async (req, res) => {
 
   console.log('👍');
   console.log(req.body);
-  //WOqk9l2Z9I
 
-  /* const newUser = {
-    "username": req.body.username,
-    "password": await genHashPassword(req.body.password)
-  } */
+  //做你想做的...例如 存到Database / send email提醒 / send Telegram 提醒
 
 });
 
