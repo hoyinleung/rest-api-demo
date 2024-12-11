@@ -188,18 +188,18 @@ app.post('/authenticate', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('API Homepage');
+});
+
 // Webhook示範
 app.post('/webhook/example', async (req, res) => {
 
-  console.log('👍');
+  console.log('✅');
   console.log(req.body);
 
   //做你想做的...例如 存到Database / send email提醒 / send Telegram 提醒
 
-});
-
-app.get('/', (req, res) => {
-  res.send('API Homepage');
 });
 
 app.listen(3001, () => {
